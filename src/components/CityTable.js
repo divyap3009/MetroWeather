@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { fetchCityData } from "../api";
 import "../styles/CityTable.css";
@@ -6,23 +7,46 @@ import "../styles/CityTable.css";
 function CityTable() {
   const [cities, setCities] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1); // Track the current page
+  const [loading, setLoading] = useState(false); // Track loading state
+  const bottomBoundaryRef = useRef(null); // Reference to the bottom of the list
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true); // Set loading state to true when fetching data
       try {
-        const data = await fetchCityData();
+        const data = await fetchCityData(page); // Pass the page number to fetchCityData
         if (data && data.results) {
-          setCities(data.results); // Set the cities array from data.results
+          setCities((prevCities) => [...prevCities, ...data.results]); // Append new cities to existing ones
         } else {
           console.error("Error: Invalid city data format");
         }
       } catch (error) {
         console.error("Error fetching city data:", error);
+      } finally {
+        setLoading(false); // Set loading state back to false when data fetching is complete
       }
     };
 
     fetchData();
-  }, []);
+  }, [page]); // Fetch data whenever the page number changes
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        bottomBoundaryRef.current &&
+        window.innerHeight + window.scrollY >=
+          bottomBoundaryRef.current.offsetTop
+      ) {
+        setPage((prevPage) => prevPage + 1); // Increment page number when scrolled to the bottom
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []); // Attach scroll event listener when component mounts
 
   // Filter cities based on search query
   const filteredCities = cities.filter((city) =>
@@ -71,6 +95,12 @@ function CityTable() {
                 <td>{city.modification_date}</td>
               </tr>
             ))}
+            {loading && (
+              <tr>
+                <td colSpan="6">Loading...</td>
+              </tr>
+            )}
+            <tr ref={bottomBoundaryRef} />
           </tbody>
         </table>
       </div>
