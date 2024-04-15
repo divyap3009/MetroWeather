@@ -1,21 +1,23 @@
 const API_KEY = "f44dadd4ab56638cf826fe35e0c262b3";
 
-export async function fetchCityData() {
+export async function fetchCityData(page) {
   try {
+    const limit = 100;
+    const offset = (page - 1) * limit;
     const response = await fetch(
-      "https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000/records?limit=100"
+      `https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000/records?limit=${limit}&offset=${offset}`
     );
     if (!response.ok) {
       throw new Error("Failed to fetch city data");
     }
     const data = await response.json();
-    console.log(data);
     return data;
   } catch (error) {
     console.error("Error fetching city data:", error);
     throw error;
   }
 }
+
 
 export async function fetchWeatherData(cityId) {
   try {
