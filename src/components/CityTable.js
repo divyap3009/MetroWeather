@@ -41,34 +41,39 @@ function CityTable() {
           className="search-input"
         />
       </header>
-      <table className="city-table">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Country</th>
-            <th>Timezone</th>
-            <th>Population</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredCities.map((city, index) => (
-            <tr key={city.geoname_id}>
-              <td>{index + 1}</td>
-              <td>
-                <Link className="city-link" to={`/weather/${city.geoname_id}`}>
-                  {city.name}
-                </Link>
-              </td>
-              <td>{city.cou_name_en}</td>
-              <td>{city.timezone}</td>
-              <td>{city.population}</td>
-              <td>{city.modification_date}</td>
+      <div className="table-container">
+        <table className="city-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Country</th>
+              <th>Timezone</th>
+              <th>Population</th>
+              <th>Date</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredCities.map((city, index) => (
+              <tr key={city.geoname_id}>
+                <td>{index + 1}</td>
+                <td>
+                  <Link
+                    className="city-link"
+                    to={`/weather/${city.geoname_id}`}
+                  >
+                    {city.name}
+                  </Link>
+                </td>
+                <td>{city.cou_name_en}</td>
+                <td>{city.timezone}</td>
+                <td>{city.population}</td>
+                <td>{city.modification_date}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
