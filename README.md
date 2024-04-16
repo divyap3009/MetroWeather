@@ -1,5 +1,5 @@
 
-### Weather Forecast Web Application
+### Infinite Scroll - Forecast Web Application
 
 This project is a weather forecast web application built using **React**. It allows users to view weather information for various cities, including current weather conditions, temperature, humidity, wind speed, and atmospheric pressure. Additionally, users can search for cities, sort and filter the city data, and click on a city to view detailed weather forecasts.
 
